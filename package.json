@@ -8,7 +8,7 @@
     "start": "next start"
   },
   "dependencies": {
-    "ether": "^0.0.9",
+    "ethers": "^6.2.3",
     "hardhat": "^2.13.0",
     "next": "16.1.2",
     "postcss": "^8.5.6",
