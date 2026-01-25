@@ -1,3 +1,4 @@
+"use client" ;
 import React , {useState, useEffect } from "react";
 import Web3Modal from "web3modal";
 import  {ethers } from "ethers" ;
@@ -34,7 +35,7 @@ export const DreamFundProvider = ({children }) => {
                 title,
                 description,
                 ethers.parseUnits(amount , 18),
-                new Date(deadline).getTime() //deadline in milliseconds
+                Math.floor(new Date(deadline).getTime() / 1000) //deadline in seconds
 
             );
             await transaction.wait() ;
