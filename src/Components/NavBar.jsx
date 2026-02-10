@@ -1,15 +1,18 @@
 "use client";
 import React, { useState, useContext } from "react";
-
-//Internal imports
 import { DreamFundContext } from "../Context/DreamFund";
 import { Logo, Menu } from "../Components/index";
 
 const NavBar = () => {
-  const { currentAccount, setCurrentAccount, connectWallet } = useContext(DreamFundContext);
+  const { currentAccount, connectWallet } = useContext(DreamFundContext);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
+  // Only treat a valid 0x address as connected
+  const isConnected = /^0x[a-fA-F0-9]{40}$/.test(currentAccount || "");
+  console.log("currentAccount:", currentAccount);
+
   const MenuList = ["White Paper", "Project", "Donation", "Members"];
+
   return (
     <div className="backgroundMain">
       <div className="px-4 py-5 mx-auto sm:max-w-xl md:max-w-full lg:max-w-screen-xl md:px-24 lg:px-8">
@@ -21,11 +24,11 @@ const NavBar = () => {
             </a>
             <ul className="flex items-center hidden space-x-8 lg:flex">
               {MenuList.map((el, i) => (
-                <li key={i + 1}>
+                <li key={i}>
                   <a
                     href="/"
-                    aria-label="Our product"
-                    title="Our product"
+                    aria-label={el}
+                    title={el}
                     className="font-medium tracking-wide text-gray-100 transition-colors duration-200 hover:text-teal-accent-400"
                   >
                     {el}
@@ -35,19 +38,17 @@ const NavBar = () => {
             </ul>
           </div>
 
-          {!currentAccount && (
-            <ul className="flex items-center hidden space-x-8 lg:flex">
-              <li>
-                <button
-                  onClick={() => connectWallet()}
-                  className="inline-flex items-center justify-center h-12 px-6 font-medium tracking-wide text-white transition duration-200 rounded shadow-md bg-deep-purple-accent-400 hover:bg-deep-purple-accent-700 focus:shadow-outline focus:outline-none background"
-                  aria-label="Sign up"
-                  title="Sign up"
-                >
-                  Connect Wallet
-                </button>
-              </li>
-            </ul>
+          {!isConnected && (
+            <div className="flex items-center space-x-8">
+              <button
+                onClick={connectWallet}
+                className="inline-flex items-center justify-center h-12 px-6 font-medium tracking-wide text-white transition duration-200 rounded shadow-md bg-deep-purple-accent-400 hover:bg-deep-purple-accent-700 focus:outline-none focus:ring-2 focus:ring-purple-500"
+                aria-label="Connect Wallet"
+                title="Connect Wallet"
+              >
+                Connect Wallet
+              </button>
+            </div>
           )}
 
           <div className="lg:hidden z-40">
@@ -72,7 +73,7 @@ const NavBar = () => {
                     </div>
                     <div>
                       <button
-                        aria-label="Close Menu "
+                        aria-label="Close Menu"
                         title="Close Menu"
                         className="p-2 -mt-2 -mr-2 transition duration-200 rounded hover:bg-gray-200 focus:bg-gray-200 focus:outline-none focus:shadow-outline"
                         onClick={() => setIsMenuOpen(false)}
@@ -89,27 +90,28 @@ const NavBar = () => {
                   <nav>
                     <ul className="space-y-4">
                       {MenuList.map((el, i) => (
-                        <li key={i + 1}>
+                        <li key={i}>
                           <a
                             href="/"
-                            aria-label="Our product"
-                            title="Our product"
+                            aria-label={el}
+                            title={el}
+                            onClick={() => setIsMenuOpen(false)}
                             className="font-medium tracking-wide text-gray-700 transition-colors duration-200 hover:text-deep-purple-accent-400"
                           >
                             {el}
                           </a>
                         </li>
                       ))}
-                      <li>
-                        <button
-                          onClick={() => connectWallet()}
-                          className="inline-flex items-center background justify-center w-full h-12 px-6 font-medium tracking-wide text-white transition duration-200 rounded shadow-md bg-deep-purple-accent-400 hover:bg-deep-purple-accent-700 focus:outline-none"
-                          aria-label="Sign up"
-                          title="Sign up"
-                        >
-                          Connect Wallet
-                        </button>
-                      </li>
+                      {!isConnected && (
+                        <li>
+                          <button
+                            onClick={connectWallet}
+                            className="inline-flex items-center background justify-center w-full h-12 px-6 font-medium tracking-wide text-white transition duration-200 rounded shadow-md bg-deep-purple-accent-400 hover:bg-deep-purple-accent-700 focus:outline-none focus:ring-2 focus:ring-purple-500"
+                          >
+                            Connect Wallet
+                          </button>
+                        </li>
+                      )}
                     </ul>
                   </nav>
                 </div>
